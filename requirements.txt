@@ -1,0 +1,27 @@
+# MCP Toolbox Dependencies
+
+# MCP SDK - Model Context Protocol implementation
+mcp>=1.9.0,<2.0.0
+
+# Data validation and parsing
+pydantic>=2.0.0
+
+# YAML support for format tools
+pyyaml>=6.0
+
+# HTTP server framework
+fastapi>=0.104.0
+uvicorn>=0.24.0
+
+# Ollama integration
+ollama>=0.1.0
+
+# Testing framework
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+
+# Environment configuration
+python-dotenv>=1.0.0
+
+# Optional: HTTP client for examples
+aiohttp>=3.9.0
