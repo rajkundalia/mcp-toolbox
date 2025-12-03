@@ -109,7 +109,8 @@ def validate_url(url: str) -> Dict[str, Any]:
             }
 
         # Check for domain/netloc (the host part)
-        if not parsed.netloc:
+        # file:// URLs are an exception as they refer to local paths
+        if not parsed.netloc and parsed.scheme not in ('file', 'mailto'):
             return {
                 "valid": False,
                 "reason": "Missing domain name"
