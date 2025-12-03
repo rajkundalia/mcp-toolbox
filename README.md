@@ -61,7 +61,11 @@ Opens web UI to test tools interactively.
 ```bash
 python client/example_usage.py
 ```
-Demonstrates connecting and using all tools programmatically.
+Demonstrates:
+- Connecting to STDIO server
+- Listing and calling all tools
+- HTTP SSE streaming (server-push events)
+- Error handling
 
 ### 3. Chat with Ollama
 ```bash
@@ -81,8 +85,19 @@ Interactive chat with automatic tool usage.
 
 **HTTP SSE Server** (`server/http_server.py`):
 - HTTP + Server-Sent Events
-- Remote tool access
+- Real-time server-push updates to clients
+- Remote tool access, multi-client support
 - Endpoints: `GET /sse`, `POST /message`, `GET /health`
+
+### Transport Comparison
+
+| Feature | STDIO | HTTP SSE |
+|---------|-------|----------|
+| Connection | Subprocess | HTTP |
+| Direction | Bidirectional pipes | POST (client→server) + SSE (server→client) |
+| Use Case | Local tools | Remote services, dashboards |
+| Complexity | Simple | Moderate |
+| Multi-client | No | Yes - broadcast to all connected clients |
 
 ### Execution Flow
 ```mermaid
