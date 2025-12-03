@@ -1,0 +1,42 @@
+sequenceDiagram
+    participant User
+    participant Host as Host<br/>run_ollama.py
+    participant Model as LLM<br/>Ollama
+    participant Server as MCP Server<br/>stdio_server.py
+    participant Tool as Tool Function<br/>yaml_to_json
+
+    User->>Host: "Convert this YAML to JSON: name: raj"
+
+    Note over Host: Add message to<br/>conversation history
+
+    Host->>Model: Send prompt with:<br/>- Conversation history<br/>- Tool descriptions<br/>- System instructions
+
+    Note over Model: Analyze request<br/>Decide to use tool
+
+    Model->>Host: Response: {"tool": "yaml_to_json",<br/>"arguments": {"yaml": "name: raj"}}
+
+    Note over Host: Parse tool call<br/>from response
+
+    Host->>Server: MCP Request:<br/>method: "tools/call"<br/>params: {name: "yaml_to_json",<br/>arguments: {yaml: "name: raj"}}
+
+    Note over Server: Validate tool exists<br/>Validate arguments
+
+    Server->>Tool: Execute function<br/>yaml_to_json(yaml="name: raj")
+
+    Note over Tool: Parse YAML<br/>Convert to JSON<br/>Format output
+
+    Tool->>Server: Return:<br/>{"json": "{\\"name\\": \\"raj\\"}"}
+
+    Server->>Host: MCP Response:<br/>content: [{type: "text",<br/>text: "{\\"json\\": ...}"}]
+
+    Note over Host: Add tool result<br/>to conversation
+
+    Host->>Model: Send tool result:<br/>"Tool result: {json: ...}"<br/>"Provide natural response"
+
+    Note over Model: Incorporate result<br/>Generate response
+
+    Model->>Host: "Here's the JSON: {"name": "raj"}"
+
+    Host->>User: Display: "Here's the JSON: {"name": "raj"}"
+
+    Note over Host,User: Conversation continues...<br/>History maintained

@@ -1,0 +1,23 @@
+flowchart TB
+    User[User Input]
+    Host[Host Process<br/>run_ollama.py]
+    Model[LLM Model<br/>Ollama llama3]
+    Server[MCP Server<br/>STDIO or HTTP]
+    Tools[Tool Functions<br/>6 Tools Available]
+
+    User -->|"Question/Request"| Host
+    Host -->|"Prompt + Tool Descriptions"| Model
+    Model -->|"Tool Call Decision"| Host
+    Host -->|"MCP JSON-RPC Request"| Server
+    Server -->|"Execute Function"| Tools
+    Tools -->|"Return Result"| Server
+    Server -->|"MCP JSON-RPC Response"| Host
+    Host -->|"Format Tool Result"| Model
+    Model -->|"Final Answer"| Host
+    Host -->|"Display Response"| User
+
+    style User fill:#e1f5ff
+    style Host fill:#fff3e0
+    style Model fill:#f3e5f5
+    style Server fill:#e8f5e9
+    style Tools fill:#fce4ec
