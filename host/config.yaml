@@ -1,0 +1,35 @@
+# MCP Toolbox Host Configuration
+
+# Server configuration
+server:
+  # Transport type: "stdio" or "http"
+  transport: "stdio"
+
+  # HTTP-specific settings (only used if transport is "http")
+  host: "localhost"
+  port: 8000
+
+# Ollama configuration
+ollama:
+  # Model to use - llama3 has better tool calling than llama2
+  # Other options: mistral, codellama, llama2
+  model: "llama3"
+
+  # Temperature (0.0-1.0)
+  # Lower = more deterministic, Higher = more creative
+  temperature: 0.7
+
+  # Request timeout in seconds
+  timeout: 30
+
+# Advanced settings (optional)
+advanced:
+  # Maximum conversation history length
+  max_history: 50
+
+  # Enable debug logging
+  debug: false
+
+  # Retry configuration
+  max_retries: 3
+  retry_delay: 1
