@@ -6,12 +6,12 @@ These tools are useful for configuration file transformations and
 data interchange between systems using different formats.
 """
 
-import json
-import yaml
+import json as json_lib
+import yaml as yaml_lib
 from typing import Dict, Any
 
 
-def yaml_to_json(yaml_string: str) -> Dict[str, Any]:
+def yaml_to_json(yaml: str) -> Dict[str, Any]:
     """
     Convert YAML string to JSON string.
 
@@ -20,7 +20,7 @@ def yaml_to_json(yaml_string: str) -> Dict[str, Any]:
     formats commonly used in DevOps and configuration management.
 
     Args:
-        yaml_string: Valid YAML string to convert
+        yaml: Valid YAML string to convert
 
     Returns:
         Dictionary containing:
@@ -35,19 +35,19 @@ def yaml_to_json(yaml_string: str) -> Dict[str, Any]:
     """
     try:
         # Parse YAML string into Python object
-        data = yaml.safe_load(yaml_string)
+        data = yaml_lib.safe_load(yaml)
 
         # Convert to formatted JSON with 2-space indentation
-        json_string = json.dumps(data, indent=2)
+        json_string = json_lib.dumps(data, indent=2)
 
         return {"json": json_string}
 
-    except yaml.YAMLError as e:
+    except yaml_lib.YAMLError as e:
         # Re-raise as a clear error for MCP error handling
         raise ValueError(f"Invalid YAML input: {str(e)}")
 
 
-def json_to_yaml(json_string: str) -> Dict[str, Any]:
+def json_to_yaml(json: str) -> Dict[str, Any]:
     """
     Convert JSON string to YAML string.
 
@@ -56,7 +56,7 @@ def json_to_yaml(json_string: str) -> Dict[str, Any]:
     configuration files (Kubernetes, Docker Compose, etc.).
 
     Args:
-        json_string: Valid JSON string to convert
+        json: Valid JSON string to convert
 
     Returns:
         Dictionary containing:
@@ -71,13 +71,13 @@ def json_to_yaml(json_string: str) -> Dict[str, Any]:
     """
     try:
         # Parse JSON string into Python object
-        data = json.loads(json_string)
+        data = json_lib.loads(json)
 
         # Convert to YAML with default flow style (block style)
-        yaml_string = yaml.dump(data, default_flow_style=False, sort_keys=False)
+        yaml_string = yaml_lib.dump(data, default_flow_style=False, sort_keys=False)
 
         return {"yaml": yaml_string}
 
-    except json.JSONDecodeError as e:
+    except json_lib.JSONDecodeError as e:
         # Re-raise as a clear error for MCP error handling
         raise ValueError(f"Invalid JSON input: {str(e)}")

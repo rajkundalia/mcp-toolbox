@@ -6,8 +6,10 @@ Get up and running with MCP Toolbox in 5 minutes.
 
 ```bash
 # Clone repository
-git clone <repository-url>
+git clone https://github.com/rajkundalia/mcp-toolbox.git
 cd mcp-toolbox
+
+#Note: I have used PyCharm and everything was simpler there, if there is a mistake in the process here. Please raise an issue.
 
 # Create virtual environment
 python -m venv venv
@@ -38,8 +40,9 @@ This opens your browser with an interactive interface:
 1. Click **"Initialize"** - should see "Connected"
 2. Click **"List Tools"** - should see 6 tools
 3. Select **"yaml_to_json"**
-4. Enter: `{"yaml": "name: test\nvalue: 123"}`
-5. Click **"Call Tool"**
+4. Enter: `name: Raj
+id: 1`
+5. Click **"Run Tool"**
 6. See JSON output!
 
 ## Step 3: Run Example Client (30 seconds)
