@@ -22,7 +22,6 @@ npx @modelcontextprotocol/inspector
 This will:
 1. Download the latest Inspector version (if needed)
 2. Launch the web-based Inspector interface
-3. Open your browser to `http://localhost:5173`
 
 ## Testing STDIO Server
 
@@ -46,8 +45,6 @@ In the Inspector UI:
 2. **Click "Initialize"**: This sends the MCP initialization handshake
 3. **View Server Info**: After initialization, you'll see server metadata
 
-**Screenshot placeholder**: Inspector connection screen showing green "Connected" status
-
 ### Step 3: Discover Tools
 
 1. **Click "List Tools"** button
@@ -64,7 +61,7 @@ Each tool displays:
 - Description
 - Input schema (click to expand)
 
-**Screenshot placeholder**: Inspector tools list showing all 6 tools with schemas
+![img.png](img.png)
 
 ### Step 4: Test Tool Execution
 
@@ -73,15 +70,12 @@ Let's test the `yaml_to_json` tool:
 1. **Select Tool**: Click on "yaml_to_json"
 2. **View Schema**: Examine the input parameters
 3. **Enter Arguments**:
-   ```json
-   {
-     "yaml": "name: John\nage: 30\ncity: NYC"
-   }
-   ```
-4. **Click "Call Tool"**
+```
+name: Raj
+id: 1
+```
+4. **Click "Run Tool"**
 5. **View Result**: You should see the JSON output
-
-**Screenshot placeholder**: Inspector showing yaml_to_json execution with input and output
 
 ### Step 5: Test Error Handling
 
@@ -95,8 +89,6 @@ Try invalid input to test error handling:
    }
    ```
 3. **Expected Result**: Error message about invalid YAML
-
-**Screenshot placeholder**: Inspector showing error response with error code and message
 
 ## Testing HTTP SSE Server
 
@@ -144,7 +136,7 @@ Follow the same testing steps as STDIO, but note:
 - You can monitor server logs in the terminal where HTTP server runs
 - Health endpoint available at `http://localhost:8000/health`
 
-## Configuration File Format
+## Configuration File Format 
 
 For complex setups, create a `mcp-config.json`:
 

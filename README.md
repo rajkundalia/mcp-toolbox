@@ -40,7 +40,7 @@ flowchart TB
 ## Installation
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/rajkundalia/mcp-toolbox.git
 cd mcp-toolbox
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate

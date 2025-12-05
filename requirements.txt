@@ -1,3 +1,4 @@
+starlette
 # MCP Toolbox Dependencies
 
 # MCP SDK - Model Context Protocol implementation

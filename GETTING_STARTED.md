@@ -97,7 +97,6 @@ python host/run_ollama.py
 |------|---------|
 | `README.md` | Full documentation |
 | `QUICKSTART.md` | 5-minute tutorial |
-| `CONTRIBUTING.md` | How to add tools |
 | `client/inspector_integration.md` | MCP Inspector guide |
 
 ## Most Common Tasks

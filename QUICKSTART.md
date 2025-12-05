@@ -40,8 +40,11 @@ This opens your browser with an interactive interface:
 1. Click **"Initialize"** - should see "Connected"
 2. Click **"List Tools"** - should see 6 tools
 3. Select **"yaml_to_json"**
-4. Enter: `name: Raj
-id: 1`
+4. Enter: 
+```
+name: Raj
+id: 1
+```
 5. Click **"Run Tool"**
 6. See JSON output!
 
@@ -113,12 +116,6 @@ Start with these files:
 2. `server/tools/format_tools.py` - See tool implementations
 3. `server/registry.py` - See tool registration
 4. `host/run_ollama.py` - See LLM integration
-
-### Add Your Own Tool
-
-Follow the guide in `CONTRIBUTING.md` to add a custom tool.
-
-Example: Add a "reverse_string" tool that reverses text.
 
 ### Test Different Transports
 
@@ -229,14 +226,6 @@ mcp-toolbox/
     └── test_network_tools.py
 ```
 
-## Learning Path
-
-1. **Day 1**: Run through this quickstart, explore with Inspector
-2. **Day 2**: Read README.md, understand architecture
-3. **Day 3**: Study tool implementations in `server/tools/`
-4. **Day 4**: Add your own tool following CONTRIBUTING.md
-5. **Day 5**: Experiment with Ollama host, try different prompts
-
 ## Resources
 
 - **MCP Spec**: https://spec.modelcontextprotocol.io
@@ -248,7 +237,6 @@ mcp-toolbox/
 ## Need Help?
 
 - Check `README.md` for detailed documentation
-- See `CONTRIBUTING.md` for development guide
 - Check `client/inspector_integration.md` for Inspector help
 - Look at test files for usage examples
 
@@ -264,9 +252,3 @@ mcp-toolbox/
 - [ ] Ran test suite
 
 Once you've checked all boxes, you're ready to build with MCP! 🚀
-
----
-
-**Time spent**: ~5 minutes
-**Skills learned**: MCP protocol, tool integration, LLM orchestration
-**Next challenge**: Add your own custom tool!
