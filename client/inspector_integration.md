@@ -113,7 +113,7 @@ pip install mcp starlette uvicorn
 
 ### Step 1: Update Your HTTP Server
 
-Your server needs to use the official MCP SDK. Here's the correct implementation structure:
+Your server needs to use the official MCP SDK:
 
 ```python
 from mcp.server import Server
@@ -151,7 +151,7 @@ See the complete updated implementation in `server/http_server.py`.
 In a terminal:
 
 ```bash
-python server/http_server_fixed.py
+python server/http_server.py
 ```
 
 Leave this running. You should see:
@@ -201,10 +201,9 @@ npx @modelcontextprotocol/inspector --config inspector-config.json
 ```
 
 In the Inspector UI:
-1. Select "toolbox-sse" from the server dropdown
+1. Select transport type as SSE
 2. Click "Connect"
-3. Click "Initialize"
-4. You should see "Connected" status
+3You should see "Connected" status
 
 ### Step 6: Test HTTP Server
 
@@ -219,34 +218,7 @@ Monitor server logs in the terminal where HTTP server runs to see:
 - Tool invocations
 - Any errors
 
-## Configuration File Format 
-
-For testing multiple transports or servers, create a comprehensive `mcp-config.json`:
-
-```json
-{
-  "mcpServers": {
-    "toolbox-stdio": {
-      "command": "python",
-      "args": ["server/stdio_server.py"],
-      "transport": "stdio"
-    },
-    "toolbox-sse": {
-      "url": "http://localhost:8000/sse",
-      "transport": "sse"
-    }
-  }
-}
-```
-
-Use with:
-```bash
-npx @modelcontextprotocol/inspector --config mcp-config.json
-```
-
-Then select which server to test from the dropdown in Inspector UI.
-
-## Troubleshooting
+## Troubleshooting [Provided by LLM, I haven't tried them]
 
 ### Issue: Inspector won't connect to STDIO server
 
@@ -369,7 +341,7 @@ npx @modelcontextprotocol/inspector python server/stdio_server.py
 | Connection drops | Check firewall | Add keepalives |
 | CORS errors | Add middleware | Configure origins |
 
-## Advanced Usage
+## Advanced Usage [Provided by LLM, I haven't tried them]
 
 ### Inspecting Raw Messages
 
@@ -408,35 +380,7 @@ This workflow tests:
 - Data transformation between tools
 - Error handling at each step
 - Output format compatibility
-
-### Performance Testing
-
-Use Inspector to test performance:
-
-1. **Measure response times**: Check Network tab for latency
-2. **Test concurrent calls**: Open multiple Inspector tabs
-3. **Monitor resource usage**: Check server CPU/memory
-4. **Test large inputs**: Verify handling of big YAML/JSON files
-
-### Automated Testing
-
-While Inspector is primarily interactive, you can:
-
-1. **Document test cases** as JSON files:
-   ```json
-   {
-     "tool": "yaml_to_json",
-     "input": {"yaml": "name: test"},
-     "expected": {"name": "test"}
-   }
-   ```
-
-2. **Use Inspector to validate schemas**: Ensure schemas match implementation
-
-3. **Export working requests**: Copy from Network tab for integration tests
-
-4. **Share test cases**: Commit test JSON files to repository
-
+- 
 ## Best Practices
 
 1. **Start with STDIO**: Use STDIO transport during initial development for simplicity
@@ -480,15 +424,6 @@ While Inspector is primarily interactive, you can:
 - Multiple clients connecting simultaneously
 - Production deployment
 - Web-based client integration
-
-## Next Steps
-
-After validating with Inspector:
-
-1. **Build Integration Tests**: Use `pytest` (see `tests/` directory)
-2. **Develop Real Client**: See `client/example_usage.py`
-3. **Connect to LLM**: Try `host/run_ollama.py`
-4. **Deploy**: Move to production with proper error handling
 
 ## Resources
 

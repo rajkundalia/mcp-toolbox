@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "mcp-toolbox": {
+    "toolbox-sse": {
       "url": "http://localhost:8000/sse",
       "transport": "sse"
     }
