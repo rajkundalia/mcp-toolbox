@@ -9,9 +9,7 @@ This file serves as a reference implementation for building MCP clients.
 
 import asyncio
 import json
-import subprocess
 import sys
-from typing import Optional
 
 # MCP SDK imports for client
 from mcp import ClientSession, StdioServerParameters
@@ -166,156 +164,6 @@ skills:
     return True
 
 
-async def example_http_client():
-    """
-    Demonstrate HTTP SSE transport client.
-
-    HTTP SSE Transport Features:
-    1. Server must be running separately (python server/http_server.py)
-    2. SSE endpoint (GET /sse) for server-to-client streaming
-    3. POST endpoint (/message) for client-to-server requests
-
-    This example demonstrates the key difference: SSE allows the server
-    to push updates to clients in real-time without polling.
-    """
-    print("=" * 60)
-    print("MCP HTTP SSE Client Example")
-    print("=" * 60)
-    print("\nNote: Make sure HTTP server is running:")
-    print("  python server/http_server.py")
-    print()
-
-    try:
-        import aiohttp
-    except ImportError:
-        print("✗ aiohttp not installed. Install with: pip install aiohttp")
-        return False
-
-    base_url = "http://localhost:8000"
-    sse_messages = []
-
-    async def listen_to_sse(session):
-        """
-        Listen to SSE stream and collect messages.
-
-        This demonstrates the server-to-client streaming capability
-        that makes SSE different from simple HTTP POST/response.
-        """
-        try:
-            async with session.get(f"{base_url}/sse") as response:
-                print("📡 Connected to SSE stream (listening for server events)...\n")
-
-                async for line in response.content:
-                    line = line.decode('utf-8').strip()
-
-                    if line.startswith('data:'):
-                        # Extract JSON data from SSE message
-                        data = line[5:].strip()
-                        try:
-                            message = json.loads(data)
-                            sse_messages.append(message)
-
-                            # Print server-pushed events
-                            if message.get('type') == 'connection':
-                                print(f"  📨 SSE Event: {message.get('message')}")
-                            elif message.get('type') == 'tool_result':
-                                print(f"  📨 SSE Event: Tool '{message.get('tool')}' executed")
-                                print(f"     Result: {message.get('result')}")
-                        except json.JSONDecodeError:
-                            pass
-
-                    # Stop after receiving a few messages
-                    if len(sse_messages) >= 3:
-                        break
-        except Exception as e:
-            print(f"  ℹ️  SSE connection closed: {e}")
-
-    try:
-        async with aiohttp.ClientSession() as http_session:
-            print("1. Testing SSE streaming (the key feature)...")
-
-            # Start SSE listener in background
-            sse_task = asyncio.create_task(listen_to_sse(http_session))
-
-            # Give SSE connection time to establish
-            await asyncio.sleep(1)
-
-            print("\n2. Testing list_tools endpoint...")
-
-            # Send list_tools request via POST
-            async with http_session.post(
-                f"{base_url}/message",
-                json={
-                    "jsonrpc": "2.0",
-                    "method": "tools/list",
-                    "params": {},
-                    "id": 1
-                }
-            ) as response:
-                result = await response.json()
-                tools = result['result']['tools']
-                print(f"✓ Found {len(tools)} tools via POST\n")
-
-            print("3. Testing call_tool endpoint (watch for SSE notification)...")
-
-            # Call yaml_to_json tool via POST
-            async with http_session.post(
-                f"{base_url}/message",
-                json={
-                    "jsonrpc": "2.0",
-                    "method": "tools/call",
-                    "params": {
-                        "name": "yaml_to_json",
-                        "arguments": {"yaml": "name: test"}
-                    },
-                    "id": 2
-                }
-            ) as response:
-                result = await response.json()
-                print(f"✓ Tool executed via POST")
-                print(f"  Result: {result['result']['content'][0]['text']}")
-
-            # Give time for SSE notification to arrive
-            await asyncio.sleep(0.5)
-
-            print("\n4. Testing health endpoint...")
-            async with http_session.get(f"{base_url}/health") as response:
-                health = await response.json()
-                print(f"✓ Server status: {health['status']}")
-                print(f"  Active SSE connections: {health['active_connections']}")
-
-            # Clean up SSE listener
-            sse_task.cancel()
-            try:
-                await sse_task
-            except asyncio.CancelledError:
-                pass
-
-            print("\n" + "=" * 60)
-            print("Key Difference: SSE vs STDIO")
-            print("=" * 60)
-            print("✓ SSE allows server to PUSH updates to clients")
-            print("✓ Multiple clients can receive the same events")
-            print("✓ Useful for: monitoring, dashboards, collaborative tools")
-            print(f"✓ Received {len(sse_messages)} server-pushed events")
-            print("=" * 60)
-
-    except aiohttp.ClientError as e:
-        print(f"\n✗ Connection error: {e}")
-        print("Make sure the HTTP server is running!")
-        return False
-    except Exception as e:
-        print(f"\n✗ Error: {e}")
-        import traceback
-        traceback.print_exc()
-        return False
-
-    print("=" * 60)
-    print("✓ HTTP client test completed!")
-    print("=" * 60)
-    return True
-
-
 async def main():
     """
     Main entry point.
@@ -331,25 +179,12 @@ async def main():
 
     print("\n" * 2)
 
-    # Ask if user wants to test HTTP client
-    try:
-        response = input("Test HTTP client? (requires server running) [y/N]: ")
-        if response.lower() == 'y':
-            http_success = await example_http_client()
-        else:
-            print("Skipping HTTP client test.")
-            http_success = True
-    except KeyboardInterrupt:
-        print("\n\nInterrupted by user.")
-        return
-
     # Summary
     print("\n" * 2)
     print("=" * 60)
     print(" Summary")
     print("=" * 60)
     print(f"STDIO Client: {'✓ Passed' if stdio_success else '✗ Failed'}")
-    print(f"HTTP Client:  {'✓ Passed' if http_success else '✗ Failed'}")
     print("=" * 60)
 
 

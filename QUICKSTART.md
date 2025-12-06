@@ -17,7 +17,7 @@ python -m venv venv
 # Activate (Mac/Linux)
 source venv/bin/activate
 
-# Activate (Windows)
+# Activate (Windows) - I have not done this, since I used PyCharm to work on this project
 venv\Scripts\activate
 
 # Install dependencies
@@ -119,16 +119,6 @@ Start with these files:
 
 ### Test Different Transports
 
-Try the HTTP SSE server:
-
-```bash
-# Terminal 1
-python server/http_server.py
-
-# Terminal 2
-curl http://localhost:8000/health
-```
-
 ### Run the Tests
 
 ```bash
@@ -159,21 +149,11 @@ ollama pull llama3
 pip install -r requirements.txt
 ```
 
-### "Port 8000 already in use"
-
-Change port in `server/http_server.py`:
-```python
-uvicorn.run(app, host="0.0.0.0", port=8001)  # Changed from 8000
-```
-
 ## Useful Commands
 
 ```bash
 # Run STDIO server
 python server/stdio_server.py
-
-# Run HTTP server
-python server/http_server.py
 
 # Test with Inspector (STDIO)
 npx @modelcontextprotocol/inspector python server/stdio_server.py
@@ -209,7 +189,6 @@ python verify_setup.py
 mcp-toolbox/
 ├── server/              # MCP servers and tools
 │   ├── stdio_server.py  # STDIO transport
-│   ├── http_server.py   # HTTP SSE transport
 │   ├── registry.py      # Tool registration
 │   └── tools/           # Tool implementations
 │
@@ -251,4 +230,4 @@ mcp-toolbox/
 - [ ] Read architecture documentation
 - [ ] Ran test suite
 
-Once you've checked all boxes, you're ready to build with MCP! 🚀
+Once you've checked all boxes, you're ready to build with MCP! 

@@ -56,7 +56,7 @@ npx @modelcontextprotocol/inspector python server/stdio_server.py
 #    - Click "List Tools"
 #    - Select "base64_encode"
 #    - Enter: {"text": "hello"}
-#    - Click "Call Tool"
+#    - Click "Run Tool"
 
 # 3. Run the example client
 python client/example_usage.py
@@ -89,7 +89,6 @@ python host/run_ollama.py
 |------|-------------|
 | `server/tools/format_tools.py` | YAML/JSON conversion |
 | `server/tools/network_tools.py` | Port check, URL validation |
-| `server/http_server.py` | HTTP SSE server (alternative transport) |
 
 ### Documentation (reference)
 
@@ -174,16 +173,13 @@ A: Run the Inspector: `npx @modelcontextprotocol/inspector python server/stdio_s
 A: No. You can use MCP without any LLM. Ollama is only for the interactive chat demo.
 
 **Q: Where do I add my own tool?**  
-A: Create it in `server/tools/`, then register it in `server/registry.py`. See `CONTRIBUTING.md` for details.
+A: Create it in `server/tools/`, then register it in `server/registry.py`. 
 
 **Q: What's the difference between server, client, and host?**  
 A: 
 - **Server** = Provides tools (this project)
 - **Client** = Uses tools (example in `client/`)
 - **Host** = Connects LLM to tools (example in `host/`)
-
-**Q: Can I skip the HTTP server?**  
-A: Yes! Focus on STDIO server first (`stdio_server.py`). HTTP is an alternative transport.
 
 ## Next Steps After This
 

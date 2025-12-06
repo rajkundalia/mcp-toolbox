@@ -64,7 +64,6 @@ python client/example_usage.py
 Demonstrates:
 - Connecting to STDIO server
 - Listing and calling all tools
-- HTTP SSE streaming (server-push events)
 - Error handling
 
 ### 3. Chat with Ollama
@@ -82,22 +81,6 @@ Interactive chat with automatic tool usage.
 - Subprocess communication via stdin/stdout
 - Simple, local tool execution
 - Used by most MCP clients
-
-**HTTP SSE Server** (`server/http_server.py`):
-- HTTP + Server-Sent Events
-- Real-time server-push updates to clients
-- Remote tool access, multi-client support
-- Endpoints: `GET /sse`, `POST /message`, `GET /health`
-
-### Transport Comparison
-
-| Feature | STDIO | HTTP SSE |
-|---------|-------|----------|
-| Connection | Subprocess | HTTP |
-| Direction | Bidirectional pipes | POST (client→server) + SSE (server→client) |
-| Use Case | Local tools | Remote services, dashboards |
-| Complexity | Simple | Moderate |
-| Multi-client | No | Yes - broadcast to all connected clients |
 
 ### Execution Flow
 ```mermaid
@@ -149,22 +132,6 @@ validate_url(url="https://example.com")
 ```bash
 # STDIO transport
 npx @modelcontextprotocol/inspector python server/stdio_server.py
-
-# HTTP transport (start server first)
-python server/http_server.py  # Terminal 1
-npx @modelcontextprotocol/inspector --config inspector-config.json  # Terminal 2
-```
-
-**Inspector Config (`inspector-config.json`):**
-```json
-{
-  "mcpServers": {
-    "toolbox": {
-      "url": "http://localhost:8000",
-      "transport": "sse"
-    }
-  }
-}
 ```
 
 ### With pytest
@@ -232,7 +199,6 @@ npx @modelcontextprotocol/inspector python server/stdio_server.py
 - **server/tools/**: Tool implementations
 - **server/registry.py**: Tool metadata and registration
 - **server/stdio_server.py**: STDIO transport
-- **server/http_server.py**: HTTP SSE transport
 - **client/**: Example clients and guides
 - **host/**: Ollama integration
 - **tests/**: Test suites
@@ -277,19 +243,6 @@ python server/stdio_server.py  # Should run without errors
 python --version  # Must be 3.10+
 ```
 
-### Port already in use (HTTP server)
-
-**Issue:** `OSError: [Errno 48] Address already in use`
-
-**Solution:**
-```bash
-# Find process using port 8000
-lsof -i :8000  # Mac/Linux
-netstat -ano | findstr :8000  # Windows
-
-# Kill process or change port in server/http_server.py
-```
-
 ### Tools not appearing
 
 **Issue:** `list_tools` returns empty
@@ -311,7 +264,6 @@ mcp-toolbox/
 │   │   └── network_tools.py      # Port check, URL validation
 │   ├── registry.py               # Tool registration
 │   ├── stdio_server.py           # STDIO transport
-│   └── http_server.py            # HTTP SSE transport
 │
 ├── client/
 │   ├── example_usage.py          # Client examples

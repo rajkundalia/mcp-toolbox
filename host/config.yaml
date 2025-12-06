@@ -2,12 +2,8 @@
 
 # Server configuration
 server:
-  # Transport type: "stdio" or "http"
+  # Transport type: "stdio"
   transport: "stdio"
-
-  # HTTP-specific settings (only used if transport is "http")
-  host: "localhost"
-  port: 8000
 
 # Ollama configuration
 ollama:
