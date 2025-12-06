@@ -2,7 +2,7 @@
 MCP Client Example Usage.
 
 Demonstrates how to connect to and use an MCP server from a client application.
-Shows both STDIO and HTTP SSE transport methods.
+Shows STDIO transport method
 
 This file serves as a reference implementation for building MCP clients.
 """

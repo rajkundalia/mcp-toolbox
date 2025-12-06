@@ -51,6 +51,8 @@ class OllamaHost:
         self.conversation_history = []
         self.mcp_session: Optional[ClientSession] = None
         self.available_tools = []
+        self.stdio_context = None
+        self.session_context = None
 
     def _load_config(self, config_path: str) -> Dict[str, Any]:
         """Load configuration from YAML file."""
@@ -88,10 +90,12 @@ class OllamaHost:
                 env=None
             )
 
-            # Connect to STDIO server
-            self.read_stream, self.write_stream = await stdio_client(server_params).__aenter__()
-            self.mcp_session = ClientSession(self.read_stream, self.write_stream)
-            await self.mcp_session.__aenter__()
+            # Store the context managers to keep them alive
+            self.stdio_context = stdio_client(server_params)
+            self.read_stream, self.write_stream = await self.stdio_context.__aenter__()
+
+            self.session_context = ClientSession(self.read_stream, self.write_stream)
+            self.mcp_session = await self.session_context.__aenter__()
 
         else:
             raise ValueError(f"Unsupported transport: {transport}")
@@ -257,8 +261,8 @@ If the request doesn't need a tool, just respond normally in natural language.
 
         # Create messages for Ollama including system prompt
         messages = [
-                       {"role": "system", "content": self._create_system_prompt()}
-                   ] + self.conversation_history
+            {"role": "system", "content": self._create_system_prompt()}
+        ] + self.conversation_history
 
         # Get response from Ollama
         try:
@@ -302,8 +306,8 @@ If the request doesn't need a tool, just respond normally in natural language.
 
             # Get final response from Ollama
             messages = [
-                           {"role": "system", "content": self._create_system_prompt()}
-                       ] + self.conversation_history
+                {"role": "system", "content": self._create_system_prompt()}
+            ] + self.conversation_history
 
             try:
                 final_response = ollama.chat(
@@ -391,8 +395,10 @@ If the request doesn't need a tool, just respond normally in natural language.
 
     async def cleanup(self):
         """Clean up resources."""
-        if self.mcp_session:
-            await self.mcp_session.__aexit__(None, None, None)
+        if self.session_context:
+            await self.session_context.__aexit__(None, None, None)
+        if self.stdio_context:
+            await self.stdio_context.__aexit__(None, None, None)
         logger.info("✓ Cleaned up resources")
 
 

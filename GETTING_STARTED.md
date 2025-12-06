@@ -80,7 +80,7 @@ python host/run_ollama.py
 
 | File | What it does | Read if... |
 |------|-------------|------------|
-| `client/example_usage.py` | How to use tools from Python + SSE streaming | You want to build a client |
+| `client/example_usage.py` | How to use tools from Python | You want to build a client |
 | `host/run_ollama.py` | How LLMs use tools | You want LLM integration |
 
 ### Other Tools (read later)

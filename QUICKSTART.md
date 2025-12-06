@@ -58,16 +58,6 @@ Watch it automatically test all 6 tools with examples.
 
 **Expected output:** Multiple ✓ checkmarks showing successful tests.
 
-**Optional:** Test HTTP SSE streaming by running the HTTP server first:
-```bash
-# Terminal 1
-python server/http_server.py
-
-# Terminal 2
-python client/example_usage.py
-# Say 'y' when prompted to test HTTP client
-```
-
 You'll see server pushing events to the client in real-time!
 
 ## Step 4: Try with Ollama (1 minute)
